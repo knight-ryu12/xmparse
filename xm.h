@@ -25,15 +25,25 @@ typedef struct {
 	uint8_t volume_column;
 	uint8_t effect_type;
 	uint8_t effect_parameter;
-} __attribute((packed)) row_data_t;
+} __attribute__((packed)) row_data_t;
 
+/*
+typedef struct {
+	row_data_t *row_data;
+} __attribute__((packed)) pattern_t;
+*/
 typedef struct {
 	uint32_t header_length; // 9
 	uint8_t packing_type; // Always 0
 	uint16_t num_rows; //1..256 (0 = 1)
 	uint16_t packed_patterndata_size;
-	row_data_t *pattern_data;
-} __attribute__((packed)) XM_Pattern;
+	//row_data_t *pattern_data;
+} __attribute__((packed)) XM_Pattern_Header;
+
+typedef struct {
+	XM_Pattern_Header pattern_header;
+	row_data_t *pattern_data; // alloc: nrows * nchannels * elem_size, access row * nchannels + channel
+} XM_Pattern_Data;
 
 typedef struct {
 	char ID[17]; // 'Extended Module: '
